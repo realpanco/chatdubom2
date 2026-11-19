@@ -1,0 +1,72 @@
+name: Build iOS IPA (No Apple ID)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  build-ipa:
+    runs-on: macos-14
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm install
+
+      - name: 🛠️ Generate Native iOS Project (Expo Prebuild)
+        run: npx expo prebuild --platform ios --clean
+
+      - name: ☕ CocoaPods Install
+        run: |
+          cd ios
+          pod install
+
+      - name: 🔍 Detect Scheme and Workspace
+        run: |
+          cd ios
+          WORKSPACE_NAME=$(ls -d *.xcworkspace | head -n 1)
+          SCHEME_NAME=$(xcodebuild -list -workspace "$WORKSPACE_NAME" | awk '/Schemes:/{flag=1;next}/^$/{flag=0}flag' | tr -d ' ' | head -n 1)
+          echo "WORKSPACE=$WORKSPACE_NAME" >> $GITHUB_ENV
+          echo "SCHEME=$SCHEME_NAME" >> $GITHUB_ENV
+          echo "Compilando Workspace: $WORKSPACE_NAME com Scheme: $SCHEME_NAME"
+
+      - name: 🔨 Build iOS App (Unsigned - No Apple ID Required)
+        run: |
+          cd ios
+          xcodebuild \
+            -workspace "$WORKSPACE" \
+            -scheme "$SCHEME" \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            PROVISIONING_PROFILE_SPECIFIER=""
+
+      - name: 📦 Package .app into .IPA
+        run: |
+          mkdir -p build-output/Payload
+          APP_PATH=$(find ios/build/Build/Products/Release-iphoneos -name "*.app" | head -n 1)
+          echo "Encontrado App em: $APP_PATH"
+          cp -r "$APP_PATH" build-output/Payload/
+          cd build-output
+          zip -r -y RobloxTikTokLive.ipa Payload
+          cd ..
+
+      - name: 📤 Upload .IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RobloxTikTokLive-Unsigned-IPA
+          path: build-output/RobloxTikTokLive.ipa
+          retention-days: 14

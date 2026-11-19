@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "Roblox Live Bridge",
+    "slug": "roblox-tiktok-live",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#05070D",
+    "splash": {
+      "image": "./assets/icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#05070D"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.victor.robloxtiktoklive",
+      "buildNumber": "1",
+      "infoPlist": {
+        "UIRequiresFullScreen": true,
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true
+        },
+        "NSLocalNetworkUsageDescription": "Permite conectar e sincronizar eventos com o servidor Roblox Live na rede local.",
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.victor.robloxtiktoklive",
+      "adaptiveIcon": {
+        "backgroundColor": "#05070D",
+        "foregroundImage": "./assets/android-icon-foreground.png"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "26f08a93-dba0-4058-bc24-e4598e28dc85"
+      }
+    },
+    "owner": "wsvtn"
+  }
+}
