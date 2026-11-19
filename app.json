@@ -4,8 +4,14 @@
     "slug": "roblox-tiktok-live",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "backgroundColor": "#05070D",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#05070D"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.victor.robloxtiktoklive",
@@ -20,7 +26,14 @@
       }
     },
     "android": {
-      "package": "com.victor.robloxtiktoklive"
+      "package": "com.victor.robloxtiktoklive",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundColor": "#05070D"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
